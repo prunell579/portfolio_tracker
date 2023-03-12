@@ -68,7 +68,7 @@ class FortuneoInterface(object):
 
 class Portfolio(object):
 
-    def __init__(self, value=0, composition=[], net_contribution=0, gross_contribution=0, performance=0, history={}) -> None:
+    def __init__(self, value=0, composition=None, net_contribution=0, gross_contribution=0, performance=0, history=None) -> None:
         self._value = value
         self._performance = performance
 
@@ -79,18 +79,21 @@ class Portfolio(object):
         self._history = history
 
     # Defined as an inner class since it only makes sense in the context of a Portfolio
-    class StockInPortfolio(abc.ABC):
-        def __init__(self):
-            self.name = ''
+    class StockInPortfolio(object):
+        def __init__(self, name):
+            self.name = name
             self.value = 0
             self.quantity = 0
 
         def increase_quantity(self, quantity_increase):
             self.quantity += quantity_increase
 
+        def get_quantity(self):
+            return self.quantity
+
     @classmethod
     def from_operations_list(cls, operations):
-        pf = Portfolio()
+        pf = cls()
 
         for operation in operations:
             pf.add_operation(operation)
@@ -101,8 +104,10 @@ class Portfolio(object):
         self._operations.append(operation)
 
         # update portfolio properties
-        self._net_contributions += operation.gross_amount
-        self._gross_contributions += operation.net_amount
+        self._net_contributions += operation.net_amount
+        self._gross_contributions += operation.gross_amount
+        self._net_contributions = round(self._net_contributions, 2)
+        self._gross_contributions = round(self._gross_contributions, 2)
         self._update_composition(operation)
 
         return
@@ -113,8 +118,9 @@ class Portfolio(object):
         if operation.ticker_id in self.get_portfolio_tickers():
             stock = self.get_stock_by_ticker(operation.ticker_id)
             stock.increase_quantity(operation.quantity)
+            # print('putting {} stocks in {}'.format(operation.quantity, operation.ticker_id))
         else:
-            self._composition.append(self.StockInPortfolio())
+            self._composition.append(self.StockInPortfolio(name=operation.ticker_id))
             self._update_composition(operation)
 
     def get_stock_by_ticker(self, ticker_id:str) -> StockInPortfolio: 
@@ -151,6 +157,12 @@ class Portfolio(object):
             total_quantity_of_shares += ticker_quantity
         return total_quantity_of_shares
 
+    def get_net_contributions(self):
+        return self._net_contributions
+
+    def get_gross_contributions(self):
+        return self._gross_contributions
+
 
 
 class BuyEstimatorHelper(object):
@@ -173,16 +185,30 @@ class BuyEstimatorHelper(object):
 
 
 if __name__ == '__main__':
-    operations = FortuneoInterface().extract_operations_from_csv('sample_fortuneo_data.csv')
-    pf = Portfolio.from_operations_list(operations)
+    from datetime import datetime as dt
+    operation_1 = Operation(
+                            PE500,
+                            date=dt.fromisoformat('2022-03-27'),
+                            quantity=12,
+                            stock_price=37.66,
+                            gross_amount=12*37.66+1.2,
+                            net_amount=12*37.66,
+                            )
+    operation_2 = Operation(
+                            PCEU,
+                            date=dt.fromisoformat('2022-04-22'),
+                            quantity=8,
+                            stock_price=24.69,
+                            gross_amount=8*24.69+0.85,
+                            net_amount=8*24.69,
+                            )
+    small_pf =  Portfolio.from_operations_list([operation_1, operation_2])
 
-    print('shares no: {}\ngross contributions: {}\nnet contributions: {}\nvalue {}'.format(pf._get_total_quantity_of_shares,
-                                                                                           pf._gross_contributions,
-                                                                                           pf._net_contributions,
-                                                                                           pf.value
-                                                                                           ))
+    print(small_pf.get_stock_by_ticker(PE500).get_quantity())
 
+    small_pf =  Portfolio()
 
+    print(small_pf.get_stock_by_ticker(PE500).get_quantity())
 
 
 
