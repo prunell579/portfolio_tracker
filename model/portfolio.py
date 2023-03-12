@@ -72,7 +72,7 @@ class Portfolio(object):
         self._value = value
         self._performance = performance
 
-        self._composition = composition
+        self._composition = []
         self._net_contributions = net_contribution
         self._gross_contributions = gross_contribution
         self._operations = []
@@ -130,8 +130,9 @@ class Portfolio(object):
             
     def get_portfolio_tickers(self):
         tickers = []
-        for stock in self._composition:
-            tickers.append(stock.name)
+        if self._composition:
+            for stock in self._composition:
+                tickers.append(stock.name)
         return tickers
 
     def _update_history(self, operation: Operation):
