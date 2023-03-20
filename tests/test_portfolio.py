@@ -40,5 +40,17 @@ class TestPortfolio(unittest.TestCase):
         self.assertEqual(self.small_pf.get_gross_contributions(), 651.49)
         self.assertEqual(self.small_pf.get_net_contributions(), 649.44)
 
+    def test_portfolio_value_setter(self):
+        self.small_pf.get_stock_by_ticker(pftools.PE500).set_price(38.53)
+        self.small_pf.get_stock_by_ticker(pftools.PCEU).set_price(24.12)
+
+        self.assertEqual(self.small_pf.get_value(), 655.32)
+
+    def test_portfolio_performance(self):
+        self.small_pf.get_stock_by_ticker(pftools.PE500).set_price(38.53)
+        self.small_pf.get_stock_by_ticker(pftools.PCEU).set_price(24.12)
+
+        self.assertEqual(self.small_pf.get_net_performance(), round(0.9053, 2))
+
 if __name__ == '__main__':
     unittest.main()

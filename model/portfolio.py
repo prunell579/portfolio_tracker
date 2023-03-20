@@ -68,21 +68,28 @@ class FortuneoInterface(object):
 
 class Portfolio(object):
 
-    def __init__(self, value=0, composition=None, net_contribution=0, gross_contribution=0, performance=0, history=None) -> None:
-        self._value = value
-        self._performance = performance
+    @staticmethod
+    def _get_performance(investment, current_value, round_result=True):
+        performance = 1e2*(current_value - investment) / investment
+        if round_result:
+            return round(performance, 2)
+        else:
+            return performance
+
+    def __init__(self) -> None:
 
         self._composition = []
-        self._net_contributions = net_contribution
-        self._gross_contributions = gross_contribution
+        self._net_contributions = 0
+        self._gross_contributions = 0
         self._operations = []
-        self._history = history
+
 
     # Defined as an inner class since it only makes sense in the context of a Portfolio
     class StockInPortfolio(object):
         def __init__(self, name):
             self.name = name
             self.value = 0
+            self._price = 0
             self.quantity = 0
 
         def increase_quantity(self, quantity_increase):
@@ -90,6 +97,12 @@ class Portfolio(object):
 
         def get_quantity(self):
             return self.quantity
+        
+        def set_price(self, price):
+            self._price = price
+
+        def get_value(self):
+            return self._price * self.quantity
 
     @classmethod
     def from_operations_list(cls, operations):
@@ -118,7 +131,6 @@ class Portfolio(object):
         if operation.ticker_id in self.get_portfolio_tickers():
             stock = self.get_stock_by_ticker(operation.ticker_id)
             stock.increase_quantity(operation.quantity)
-            # print('putting {} stocks in {}'.format(operation.quantity, operation.ticker_id))
         else:
             self._composition.append(self.StockInPortfolio(name=operation.ticker_id))
             self._update_composition(operation)
@@ -134,15 +146,6 @@ class Portfolio(object):
             for stock in self._composition:
                 tickers.append(stock.name)
         return tickers
-
-    def _update_history(self, operation: Operation):
-        return
-        if operation.date in self._history.keys():
-            portfolio_in_history = self._history[operation.date]
-            if portfolio_in_history._get_total_quantity_of_shares() <= self._get_total_quantity_of_shares():
-                self._history[operation.date] = self
-        else:
-            self._history[operation.date] = self
 
     def get_portfolio_ticker_names(self):
         names  = []
@@ -163,7 +166,15 @@ class Portfolio(object):
 
     def get_gross_contributions(self):
         return self._gross_contributions
-
+    
+    def get_value(self):
+        value = 0
+        for stock in self._composition:
+            value += stock.get_value()
+        return value
+    
+    def get_net_performance(self):
+        return self._get_performance(self._net_contributions, self.get_value())
 
 
 class BuyEstimatorHelper(object):
