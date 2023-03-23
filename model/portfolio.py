@@ -25,37 +25,8 @@ class Operation(object):
 
 class FortuneoInterface(object):
 
-    TICKER_COLUMN = 0
-    DATE_COLUMN = 3
-    QTY_COLUMN = 4
-    STOCKPRICE_COLUMN = 5
-    GROSSAMOUNT_COLUMN = 6
-    NETAMOUNT_COLUMN = 8
-
-    def extract_operations_from_csv(self, filepath: str):
-        import csv
-        operations = []
-        with open(filepath) as f:
-            reader = csv.reader(f, delimiter=';')
-            next(reader)
-            for row in reader:
-                ticker_id = self._get_id_from_long_ftn_format(row[self.TICKER_COLUMN])
-                date = dt.strptime(row[self.DATE_COLUMN], "%d/%m/%Y")
-                operation = Operation(
-                                        ticker_id,
-                                        date,
-                                        int(float(row[self.QTY_COLUMN])),
-                                        float(row[self.STOCKPRICE_COLUMN]),
-                                        abs(float(row[self.GROSSAMOUNT_COLUMN])),
-                                        abs(float(row[self.NETAMOUNT_COLUMN])),
-                                      )
-
-                operations.append(operation)
-
-        return operations
-
-
-    def _get_id_from_long_ftn_format(self, id_long_format: str):
+    @staticmethod
+    def get_id_from_long_ftn_format(id_long_format: str):
         if id_long_format == PE500_LONG_FORMAT:
             return PE500
         if id_long_format == PCEU_LONG_FORMAT:
@@ -64,6 +35,35 @@ class FortuneoInterface(object):
             return PAEEM
         raise ValueError('Ticker {} not supported'.format(id_long_format))
 
+    @staticmethod
+    def extract_operations_from_csv(filepath: str):
+        TICKER_COLUMN = 0
+        DATE_COLUMN = 3
+        QTY_COLUMN = 4
+        STOCKPRICE_COLUMN = 5
+        # on client side, net and gross are inversed
+        NETAMOUNT_COLUMN = 8
+        GROSSAMOUNT_COLUMN = 6
+        import csv
+        operations = []
+        with open(filepath) as f:
+            reader = csv.reader(f, delimiter=';')
+            next(reader)
+            for row in reader:
+                ticker_id = FortuneoInterface.get_id_from_long_ftn_format(row[TICKER_COLUMN])
+                date = dt.strptime(row[DATE_COLUMN], "%d/%m/%Y")
+                operation = Operation(
+                                        ticker_id,
+                                        date,
+                                        int(float(row[QTY_COLUMN])),
+                                        float(row[STOCKPRICE_COLUMN]),
+                                        abs(float(row[NETAMOUNT_COLUMN])),
+                                        abs(float(row[GROSSAMOUNT_COLUMN])),
+                                      )
+
+                operations.append(operation)
+
+        return operations
 
 
 class Portfolio(object):
@@ -146,13 +146,6 @@ class Portfolio(object):
             for stock in self._composition:
                 tickers.append(stock.name)
         return tickers
-
-    def get_portfolio_ticker_names(self):
-        names  = []
-        for ticker in self._composition:
-            names.append(ticker.name)
-
-        return names
 
     def _get_total_quantity_of_shares(self):
         return

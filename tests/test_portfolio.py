@@ -52,5 +52,27 @@ class TestPortfolio(unittest.TestCase):
 
         self.assertEqual(self.small_pf.get_net_performance(), round(0.9053, 2))
 
+    def test_fortuneo_parser(self):
+        operations = pftools.FortuneoInterface.extract_operations_from_csv('./model/small_sample_fortuneo.csv')
+
+        self.assertEqual(len(operations), 11)
+
+        pf = pftools.Portfolio.from_operations_list(operations)
+
+        tickers_in_pf = pf.get_portfolio_tickers()
+
+        self.assertEqual(len(tickers_in_pf), 3)
+
+        self.assertIn(pftools.PE500, tickers_in_pf)
+        self.assertIn(pftools.PCEU, tickers_in_pf)
+        self.assertIn(pftools.PAEEM, tickers_in_pf)
+
+        self.assertEqual(pf.get_stock_by_ticker(pftools.PE500).get_quantity(), 63)
+        self.assertEqual(pf.get_stock_by_ticker(pftools.PAEEM).get_quantity(), 28)
+        self.assertEqual(pf.get_stock_by_ticker(pftools.PCEU).get_quantity(), 13)
+
+        self.assertEqual(pf.get_net_contributions(), 2875.24)
+        self.assertEqual(pf.get_gross_contributions(), 2888.2)
+
 if __name__ == '__main__':
     unittest.main()
