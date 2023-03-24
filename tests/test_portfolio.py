@@ -74,5 +74,10 @@ class TestPortfolio(unittest.TestCase):
         self.assertEqual(pf.get_net_contributions(), 2875.24)
         self.assertEqual(pf.get_gross_contributions(), 2888.2)
 
+    def test_stock_close_price(self):
+        import datetime as dt
+        close_price = pftools.YFInterface.stock_close_price(pftools.PAEEM, dt.datetime.fromisoformat('2023-03-20'))
+        self.assertAlmostEqual(close_price, 19.79, places=2)
+
 if __name__ == '__main__':
     unittest.main()

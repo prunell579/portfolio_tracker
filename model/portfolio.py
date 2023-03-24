@@ -1,6 +1,5 @@
-from datetime import datetime as dt
-from pprint import pprint
-import abc
+import datetime as dt
+import yfinance as yf
 
 PE500_LONG_FORMAT = 'AMUNDI ETF PEA S&P 500 UCITS ETF - EUR'
 PCEU_LONG_FORMAT = 'AMUNDI ETF PEA MSCI EUROPE UCITS ETF - EUR'
@@ -13,7 +12,7 @@ PAEEM = 'PAEEM'
 
 class Operation(object):
 
-    def __init__(self, ticker_id: str, date: dt.date, quantity: int, stock_price: float, gross_amount: float,
+    def __init__(self, ticker_id: str, date: dt.datetime.date, quantity: int, stock_price: float, gross_amount: float,
                  net_amount: float):
         self.ticker_id = ticker_id
         self.date = date
@@ -51,7 +50,7 @@ class FortuneoInterface(object):
             next(reader)
             for row in reader:
                 ticker_id = FortuneoInterface.get_id_from_long_ftn_format(row[TICKER_COLUMN])
-                date = dt.strptime(row[DATE_COLUMN], "%d/%m/%Y")
+                date = dt.datetime.strptime(row[DATE_COLUMN], "%d/%m/%Y")
                 operation = Operation(
                                         ticker_id,
                                         date,
@@ -179,7 +178,7 @@ class BuyEstimatorHelper(object):
         the current_price_element might not be necessary with the yahoo api
         """
         for ticker_name, quantity, current_price in buy_list:
-            date = dt.now()
+            date = dt.datetime.now()
             net_amount = quantity * current_price
             gross_amount = net_amount
 
@@ -187,13 +186,42 @@ class BuyEstimatorHelper(object):
 
         return current_pf
 
+class YFInterface(object):
+
+    @staticmethod
+    def yahoo_stock_ticker(ticker_name):
+        if ticker_name == PE500 or ticker_name == PCEU or ticker_name == PAEEM:
+            return ticker_name + '.PA' 
+        else:
+            raise ValueError('Ticker {} not supported'.format(ticker_name))
+
+    @staticmethod
+    def stock_close_price(ticker_name, date:dt):
+        end = date + dt.timedelta(days=1)
+        data = yf.Ticker(YFInterface.yahoo_stock_ticker(ticker_name)).history(start=date, end=end, actions=False)
+        return data['Close'][0]
+    
+    @staticmethod
+    def get_last_stock_price(tickers: list):
+        """Returns a dictionary containing the ticker names as key values and the last stock price as 
+        items
+        """
+        if isinstance(tickers, str):
+            tickers = [tickers]
+
+        stock_prices = {}
+        for ticker_name in tickers:
+            ticker_yahoo_name = YFInterface.yahoo_stock_ticker(ticker_name)
+            data =  yf.download(ticker_yahoo_name, period='1d')
+            stock_prices[ticker_name] = data['Close'][0]
+        return stock_prices
+
 
 
 if __name__ == '__main__':
-    from datetime import datetime as dt
     operation_1 = Operation(
                             PE500,
-                            date=dt.fromisoformat('2022-03-27'),
+                            date=dt.datetime.fromisoformat('2022-03-27'),
                             quantity=12,
                             stock_price=37.66,
                             gross_amount=12*37.66+1.2,
@@ -201,7 +229,7 @@ if __name__ == '__main__':
                             )
     operation_2 = Operation(
                             PCEU,
-                            date=dt.fromisoformat('2022-04-22'),
+                            date=dt.datetime.fromisoformat('2022-04-22'),
                             quantity=8,
                             stock_price=24.69,
                             gross_amount=8*24.69+0.85,
