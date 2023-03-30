@@ -1,4 +1,6 @@
 import unittest
+import sys
+sys.path.append('.')
 import model.portfolio as pftools
 
 
@@ -6,6 +8,7 @@ class TestPortfolio(unittest.TestCase):
 
     def setUp(self):
         from datetime import datetime as dt
+        import copy
         operation_1 = pftools.Operation(
                                         pftools.PE500,
                                         date=dt.fromisoformat('2022-03-27'),
@@ -24,6 +27,12 @@ class TestPortfolio(unittest.TestCase):
                                         )
         self.small_pf =  pftools.Portfolio.from_operations_list([operation_1, operation_2])
 
+
+        self.small_pf_with_prices = copy.deepcopy(self.small_pf)
+        self.small_pf_with_prices.get_stock_by_ticker(pftools.PE500).set_price(38.53)
+        self.small_pf_with_prices.get_stock_by_ticker(pftools.PCEU).set_price(24.12)
+
+
     def tearDown(self):
         self.small_pf = None
 
@@ -41,16 +50,96 @@ class TestPortfolio(unittest.TestCase):
         self.assertEqual(self.small_pf.get_net_contributions(), 649.44)
 
     def test_portfolio_value_setter(self):
+        """
+        Given a portfolio with the following composition
+        TICKER  QTY P/STOCK
+        PE500   12  38.53
+        PCEU    8   24.12
+
+        The TOTAL value of the portfolio must be: 655.32
+        the value of PE500 must be: 462.36
+        the value of PCEU must be: 192.96
+        """
         self.small_pf.get_stock_by_ticker(pftools.PE500).set_price(38.53)
         self.small_pf.get_stock_by_ticker(pftools.PCEU).set_price(24.12)
 
         self.assertEqual(self.small_pf.get_value(), 655.32)
+        self.assertEqual(self.small_pf.get_stock_by_ticker(pftools.PE500).get_value(), 462.36)
+        self.assertEqual(self.small_pf.get_stock_by_ticker(pftools.PCEU).get_value(), 192.96)
+
+    def test_portfolio_values_setter(self):
+        """
+        Given a portfolio with the following composition
+        TICKER  QTY P/STOCK
+        PE500   12  38.53
+        PCEU    8   24.12
+
+        The TOTAL value of the portfolio must be: 655.32
+        the value of PE500 must be: 462.36
+        the value of PCEU must be: 192.96
+        """
+        prices = {
+                    pftools.PE500: 38.53,
+                    pftools.PCEU: 24.12
+                 }
+        self.small_pf.set_stock_prices(prices)
+
+        self.assertEqual(self.small_pf.get_stock_by_ticker(pftools.PE500).get_value(), 462.36)
+        self.assertEqual(self.small_pf.get_stock_by_ticker(pftools.PCEU).get_value(), 192.96)
+
 
     def test_portfolio_performance(self):
         self.small_pf.get_stock_by_ticker(pftools.PE500).set_price(38.53)
         self.small_pf.get_stock_by_ticker(pftools.PCEU).set_price(24.12)
 
         self.assertEqual(self.small_pf.get_net_performance(), round(0.9053, 2))
+
+    def test_stock_weights(self):
+        """
+        Given a portfolio of the following composition:
+        TICKER  QTY VALUE
+        PE500   12  462.36
+        PCEU    8   192.96
+
+        TOTAL VALUE = 655.32
+
+        THEN the weight of each stock must be:
+        PE500   70.55
+        PCEU    29.45
+        """
+
+        self.assertEqual(self.small_pf_with_prices.get_stock_weight(pftools.PE500), 70.55)
+        self.assertEqual(self.small_pf_with_prices.get_stock_weight(pftools.PCEU), 29.45)
+
+    def test_portfolio_summary(self):
+        """
+        Given a portfolio of the following composition:
+        TICKER  QTY VALUE
+        PE500   12  462.36
+        PCEU    8   192.96
+
+        TOTAL VALUE = 655.32
+
+        THEN the weight of each stock must be:
+        PE500   70.55
+        PCEU    29.45
+        """
+
+        expected_dict = {
+                            pftools.PE500: {
+                                            'value': 462.36,
+                                            'quantity': 12,
+                                            'weight': 70.55
+                                            },
+                            pftools.PCEU: {
+                                            'value': 192.96,
+                                            'quantity': 8,
+                                            'weight': 29.45
+                                            }
+                        }
+        
+        self.assertDictEqual(self.small_pf_with_prices.get_portfolio_summary(), expected_dict)
+
 
     def test_fortuneo_parser(self):
         operations = pftools.FortuneoInterface.extract_operations_from_csv('./model/small_sample_fortuneo.csv')

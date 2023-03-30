@@ -45,7 +45,7 @@ class FortuneoInterface(object):
         GROSSAMOUNT_COLUMN = 6
         import csv
         operations = []
-        with open(filepath) as f:
+        with open(filepath, encoding='ISO-8859-1') as f:
             reader = csv.reader(f, delimiter=';')
             next(reader)
             for row in reader:
@@ -138,6 +138,13 @@ class Portfolio(object):
         for stock in self._composition:
             if stock.name == ticker_id:
                 return stock
+        raise KeyError('The stock of ticker {} does not exist in portfolio'.format(ticker_id))
+
+    def get_stock_weight(self, ticker_id: str) -> float:
+        try:
+            return round(100 * (self.get_stock_by_ticker(ticker_id).get_value() / self.get_value()), 2)
+        except ZeroDivisionError:
+            return 0.0
             
     def get_portfolio_tickers(self):
         tickers = []
@@ -145,6 +152,18 @@ class Portfolio(object):
             for stock in self._composition:
                 tickers.append(stock.name)
         return tickers
+
+    def set_stock_prices(self, prices: dict):
+        """
+        prices is a dictionary whose keys are ticker_ids and whose values are the prices to set
+        the method searches for the ticker and sets the price if found
+        """
+
+        for ticker_id, price in prices.items():
+            try:
+                self.get_stock_by_ticker(ticker_id).set_price(price)
+            except KeyError:
+                pass
 
     def _get_total_quantity_of_shares(self):
         return
@@ -167,6 +186,27 @@ class Portfolio(object):
     
     def get_net_performance(self):
         return self._get_performance(self._net_contributions, self.get_value())
+    
+    def get_portfolio_summary(self):
+        '''
+        Returns a dictionary with the following keys:
+            ticker1: 
+                    :quantity: int
+                    :value: float
+                    :share: float
+            tickern:
+                    :quantity: int
+                    :value: float
+                    :share: float
+        '''
+        summary = {}
+        for stock in self._composition:
+            summary[stock.name] = {
+                                    'value': stock.get_value(),
+                                    'quantity': stock.get_quantity(),
+                                    'weight': self.get_stock_weight(stock.name)
+                                  }
+        return summary            
 
 
 class BuyEstimatorHelper(object):
@@ -215,6 +255,7 @@ class YFInterface(object):
             data =  yf.download(ticker_yahoo_name, period='1d')
             stock_prices[ticker_name] = data['Close'][0]
         return stock_prices
+
 
 
 
