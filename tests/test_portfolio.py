@@ -135,7 +135,8 @@ class TestPortfolio(unittest.TestCase):
                                             'value': 192.96,
                                             'quantity': 8,
                                             'weight': 29.45
-                                            }
+                                            },
+                            'total_value': 655.32
                         }
         
         self.assertDictEqual(self.small_pf_with_prices.get_portfolio_summary(), expected_dict)
@@ -168,5 +169,31 @@ class TestPortfolio(unittest.TestCase):
         close_price = pftools.YFInterface.stock_close_price(pftools.PAEEM, dt.datetime.fromisoformat('2023-03-20'))
         self.assertAlmostEqual(close_price, 19.79, places=2)
 
+    def test_buy_estimator(self):
+        print(self.small_pf_with_prices.get_portfolio_summary())
+
+        buy_list = [(pftools.PE500, 2), (pftools.PCEU, 4)]
+
+        current_prices = {pftools.PE500: 42.35, pftools.PCEU: 23.89}
+
+        simulated_pf = pftools.BuyEstimatorHelper.simulate_buy(self.small_pf_with_prices, buy_list, current_prices=current_prices)
+
+        expected_dict = {
+                            pftools.PE500: {
+                                            'value': 592.9,
+                                            'quantity': 14,
+                                            'weight': 67.41
+                                            },
+                            pftools.PCEU: {
+                                            'value': 286.68,
+                                            'quantity': 12,
+                                            'weight': 32.59
+                                            },
+                            'total_value': 879.58
+                        }
+
+
+        self.assertDictEqual(simulated_pf.get_portfolio_summary(), expected_dict)
+        
 if __name__ == '__main__':
     unittest.main()

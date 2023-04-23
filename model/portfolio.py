@@ -1,4 +1,6 @@
+import copy
 import datetime as dt
+from typing import List
 import yfinance as yf
 
 PE500_LONG_FORMAT = 'AMUNDI ETF PEA S&P 500 UCITS ETF - EUR'
@@ -101,7 +103,7 @@ class Portfolio(object):
             self._price = price
 
         def get_value(self):
-            return self._price * self.quantity
+            return round(self._price * self.quantity, 2)
 
     @classmethod
     def from_operations_list(cls, operations):
@@ -121,10 +123,6 @@ class Portfolio(object):
         self._net_contributions = round(self._net_contributions, 2)
         self._gross_contributions = round(self._gross_contributions, 2)
         self._update_composition(operation)
-
-        return
-        self._performance = (self.value - self._net_contributions) / self._net_contributions
-        self._update_history(operation)
 
     def _update_composition(self, operation: Operation):
         if operation.ticker_id in self.get_portfolio_tickers():
@@ -178,11 +176,11 @@ class Portfolio(object):
     def get_gross_contributions(self):
         return self._gross_contributions
     
-    def get_value(self):
+    def get_value(self) -> float:
         value = 0
         for stock in self._composition:
             value += stock.get_value()
-        return value
+        return round(value, 2)
     
     def get_net_performance(self):
         return self._get_performance(self._net_contributions, self.get_value())
@@ -198,6 +196,8 @@ class Portfolio(object):
                     :quantity: int
                     :value: float
                     :share: float
+            total_value:
+                    :value: float
         '''
         summary = {}
         for stock in self._composition:
@@ -206,25 +206,48 @@ class Portfolio(object):
                                     'quantity': stock.get_quantity(),
                                     'weight': self.get_stock_weight(stock.name)
                                   }
-        return summary            
+        summary['total_value'] = self.get_value()
+        return summary
 
 
 class BuyEstimatorHelper(object):
 
     @staticmethod
-    def simulate_buy(current_pf: Portfolio, buy_list) -> Portfolio:
+    def simulate_buy(base_pf: Portfolio, buy_list: List, verbose=False, current_prices=None) -> Portfolio:
         """
         buy list can be a list of tuples: [(ticker_name, quantity, current_price)]
         the current_price_element might not be necessary with the yahoo api
         """
-        for ticker_name, quantity, current_price in buy_list:
+
+        simulated_pf = copy.deepcopy(base_pf)
+
+        if not current_prices:
+            ticker_names = []
+            for ticker_name, _ in buy_list:
+                ticker_names.append(ticker_name)
+            current_prices = YFInterface.get_last_stock_price(ticker_names)
+
+        investment = 0
+        for ticker_name, quantity in buy_list:
             date = dt.datetime.now()
-            net_amount = quantity * current_price
+            net_amount = quantity * current_prices[ticker_name]
             gross_amount = net_amount
+            investment += net_amount
 
-            current_pf.add_operation(Operation(ticker_name, date, quantity, current_price, gross_amount, net_amount))
+            simulated_pf.add_operation(
+                                        Operation(ticker_name, date, quantity, current_prices[ticker_name], gross_amount,
+                                                  net_amount
+                                                 )
+                                      )
+            
+            # update stock price
+            simulated_pf.get_stock_by_ticker(ticker_name).set_price(current_prices[ticker_name])
 
-        return current_pf
+
+        if verbose:
+            print('total invested {}'.format(investment))
+
+        return simulated_pf
 
 class YFInterface(object):
 
@@ -236,13 +259,16 @@ class YFInterface(object):
             raise ValueError('Ticker {} not supported'.format(ticker_name))
 
     @staticmethod
-    def stock_close_price(ticker_name, date:dt):
+    def stock_close_price(ticker_name: str, date:dt) -> float:
+        """
+        Returns close stock price for ticker_name at date
+        """
         end = date + dt.timedelta(days=1)
         data = yf.Ticker(YFInterface.yahoo_stock_ticker(ticker_name)).history(start=date, end=end, actions=False)
         return data['Close'][0]
     
     @staticmethod
-    def get_last_stock_price(tickers: list):
+    def get_last_stock_price(tickers: List) -> dict:
         """Returns a dictionary containing the ticker names as key values and the last stock price as 
         items
         """
@@ -255,9 +281,6 @@ class YFInterface(object):
             data =  yf.download(ticker_yahoo_name, period='1d')
             stock_prices[ticker_name] = data['Close'][0]
         return stock_prices
-
-
-
 
 if __name__ == '__main__':
     operation_1 = Operation(
