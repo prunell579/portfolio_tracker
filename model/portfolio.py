@@ -114,6 +114,36 @@ class Portfolio(object):
 
         return pf
 
+    @classmethod
+    def from_tracker_and_quantity(cls, pf_contents: dict, fetch_stock_prices=False):
+        """
+        Method to simplify the portfolio creation. Assumes all assets are bought today
+        and no history is kept, therefore no performance information should be expected.
+
+        the pf_contents dictionary is expected to have this form:
+
+        pf_contents = {
+                        ['tracker_id1'] = qtity1,
+                        ['tracker_id2'] = qtity2,
+                        ['tracker_id3'] = qtity3,
+                        etc
+                    }
+        """
+
+        operations_list = []
+        now = dt.datetime.now()
+        for ticker_id, shares_quantity in pf_contents.items():
+            operations_list.append(Operation(ticker_id, now, shares_quantity, 1, 1, 1))
+
+        pf = cls.from_operations_list(operations_list)
+
+        if fetch_stock_prices:
+            prices = YFInterface.get_last_stock_price(pf.get_portfolio_tickers())
+            pf.set_stock_prices(prices)
+
+        return pf
+
+
     def add_operation(self, operation: Operation):
         self._operations.append(operation)
 

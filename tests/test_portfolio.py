@@ -194,6 +194,23 @@ class TestPortfolio(unittest.TestCase):
 
 
         self.assertDictEqual(simulated_pf.get_portfolio_summary(), expected_dict)
-        
+
+    def test_pf_from_tickers_and_quantity(self):
+
+        pf_contents = {pftools.PE500: 234, pftools.PCEU: 200, pftools.PAEEM: 345}
+        pf = pftools.Portfolio.from_tracker_and_quantity(pf_contents, fetch_stock_prices=True)
+
+        expected_pf_tickers = pf.get_portfolio_tickers()
+
+        self.assertCountEqual(expected_pf_tickers, [pftools.PE500, pftools.PCEU, pftools.PAEEM])
+        self.assertEqual(pf.get_stock_by_ticker(pftools.PE500).get_quantity(), 234)
+        self.assertEqual(pf.get_stock_by_ticker(pftools.PCEU).get_quantity(), 200)
+        self.assertEqual(pf.get_stock_by_ticker(pftools.PAEEM).get_quantity(), 345)
+
+        self.assertGreater(pf.get_stock_by_ticker(pftools.PE500).get_value(), 0)
+        self.assertGreater(pf.get_stock_by_ticker(pftools.PCEU).get_value(), 0)
+        self.assertGreater(pf.get_stock_by_ticker(pftools.PAEEM).get_value(), 0)
+
+
 if __name__ == '__main__':
     unittest.main()
