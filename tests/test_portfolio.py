@@ -141,6 +141,8 @@ class TestPortfolio(unittest.TestCase):
         
         self.assertDictEqual(self.small_pf_with_prices.get_portfolio_summary(), expected_dict)
 
+        self.small_pf_with_prices.get_portfolio_summary()
+
 
     def test_fortuneo_parser(self):
         operations = pftools.FortuneoInterface.extract_operations_from_csv('./model/small_sample_fortuneo.csv')

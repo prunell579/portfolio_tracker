@@ -211,11 +211,11 @@ class Portfolio(object):
         for stock in self._composition:
             value += stock.get_value()
         return round(value, 2)
-    
+
     def get_net_performance(self):
         return self._get_performance(self._net_contributions, self.get_value())
     
-    def get_portfolio_summary(self):
+    def get_portfolio_summary(self, verbose=False):
         '''
         Returns a dictionary with the following keys:
             ticker1: 
@@ -237,13 +237,30 @@ class Portfolio(object):
                                     'weight': self.get_stock_weight(stock.name)
                                   }
         summary['total_value'] = self.get_value()
+
+        if verbose:
+            from tabulate import tabulate
+            headers = ['Ticker', 'Value', 'Quantity', 'Weight']
+            data = []
+            for ticker_name, ticker_info in summary.items():
+                try:
+                    data_row = [ticker_name, ticker_info['value'], ticker_info['quantity'], ticker_info['weight']]
+                except IndexError:
+                    if ticker_name == 'total_value':
+                        data_row = ['TOTAL', ticker_info]
+                    else:
+                        raise ValueError
+                data.append(data_row)
+
+            print(tabulate(data, headers))
+
         return summary
 
 
 class BuyEstimatorHelper(object):
 
     @staticmethod
-    def simulate_buy(base_pf: Portfolio, buy_list: List, verbose=False, current_prices=None) -> Portfolio:
+    def simulate_buy(base_pf: Portfolio, purchase_dict: dict, verbose=False, current_prices=None) -> Portfolio:
         """
         buy list can be a list of tuples: [(ticker_name, quantity, current_price)]
         the current_price_element might not be necessary with the yahoo api
@@ -252,17 +269,15 @@ class BuyEstimatorHelper(object):
         simulated_pf = copy.deepcopy(base_pf)
 
         if not current_prices:
-            ticker_names = []
-            for ticker_name, _ in buy_list:
-                ticker_names.append(ticker_name)
-            current_prices = YFInterface.get_last_stock_price(ticker_names)
+            current_prices = YFInterface.get_last_stock_price(list(purchase_dict.keys()))
 
-        investment = 0
-        for ticker_name, quantity in buy_list:
+        investment = dict.fromkeys(purchase_dict.keys())
+        for ticker_name, quantity in purchase_dict.items():
             date = dt.datetime.now()
             net_amount = quantity * current_prices[ticker_name]
             gross_amount = net_amount
-            investment += net_amount
+
+            investment[ticker_name] = gross_amount
 
             simulated_pf.add_operation(
                                         Operation(ticker_name, date, quantity, current_prices[ticker_name], gross_amount,
@@ -275,7 +290,12 @@ class BuyEstimatorHelper(object):
 
 
         if verbose:
-            print('total invested {}'.format(investment))
+            total_investment = 0
+            for ticker_name, invesment_amount in investment.items():
+                print('Invesment for {}: {}'.format(ticker_name, invesment_amount))
+                total_investment += invesment_amount
+            
+            print('total invested {}'.format(total_investment))
 
         return simulated_pf
 
