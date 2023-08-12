@@ -172,13 +172,15 @@ class TestPortfolio(unittest.TestCase):
         self.assertAlmostEqual(close_price, 19.79, places=2)
 
     def test_buy_estimator(self):
-        print(self.small_pf_with_prices.get_portfolio_summary())
 
-        buy_list = [(pftools.PE500, 2), (pftools.PCEU, 4)]
+        buy_dict = {
+                        pftools.PE500: 2,
+                        pftools.PCEU: 4
+                    }
 
         current_prices = {pftools.PE500: 42.35, pftools.PCEU: 23.89}
 
-        simulated_pf = pftools.BuyEstimatorHelper.simulate_buy(self.small_pf_with_prices, buy_list, current_prices=current_prices)
+        simulated_pf = pftools.BuyEstimatorHelper.simulate_buy(self.small_pf_with_prices, buy_dict, current_prices=current_prices)
 
         expected_dict = {
                             pftools.PE500: {
