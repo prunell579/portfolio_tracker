@@ -245,7 +245,7 @@ class Portfolio(object):
             for ticker_name, ticker_info in summary.items():
                 try:
                     data_row = [ticker_name, ticker_info['value'], ticker_info['quantity'], ticker_info['weight']]
-                except IndexError:
+                except (IndexError, TypeError):
                     if ticker_name == 'total_value':
                         data_row = ['TOTAL', ticker_info]
                     else:
@@ -292,10 +292,10 @@ class BuyEstimatorHelper(object):
         if verbose:
             total_investment = 0
             for ticker_name, invesment_amount in investment.items():
-                print('Invesment for {}: {}'.format(ticker_name, invesment_amount))
+                print('Investment for {}: {:.2f}'.format(ticker_name, invesment_amount))
                 total_investment += invesment_amount
             
-            print('total invested {}'.format(total_investment))
+            print('Total invested {}'.format(total_investment))
 
         return simulated_pf
 
