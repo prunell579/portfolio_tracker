@@ -22,19 +22,38 @@ if __name__ == '__main__':
 
             contributions_history[year][month] = op.net_amount
 
-    # set up plot
+    # form date iterables in order
+    years = sorted(list(contributions_history.keys()))
+    # get time boundaries of data
+    first_month_first_year = min(list(contributions_history[years[0]].keys()))
+    last_month_last_year = max(list(contributions_history[years[-1]].keys()))
 
+
+    # set up plot
     year_month_list = []
     contributions_list = []
-    for contribution_year in contributions_history.keys():
+    for contribution_year in years:
         year_string = str(contribution_year)[-2:]
-        for contribution_month in contributions_history[contribution_year].keys():
+        for contribution_month in range(1,13):
+            if contribution_year == years[0]:
+                if contribution_month < first_month_first_year:
+                    continue
+
+            elif contribution_year == years[-1]:
+                if contribution_month > last_month_last_year:
+                    break
+
             month_string = str(contribution_month)
             year_month_list.append(year_string + '-' + month_string)
-            contributions_list.append(contributions_history[contribution_year][contribution_month])
+            try:
+                contributions_list.append(contributions_history[contribution_year][contribution_month])
+            except KeyError:
+                contributions_list.append(0)
+
+
             
 
-    
+    print(contributions_history)
     plt.bar(year_month_list, contributions_list)
     plt.ylabel('Amount invested [EUR]')
     plt.show()
