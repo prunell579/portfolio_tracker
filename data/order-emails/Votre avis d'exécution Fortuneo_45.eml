@@ -1,0 +1,153 @@
+Received: from SJ0PR19MB4496.namprd19.prod.outlook.com (2603:10b6:a03:289::15)
+ by PH7PR19MB6109.namprd19.prod.outlook.com with HTTPS; Wed, 17 Apr 2024
+ 13:15:36 +0000
+Received: from DB9PR01CA0018.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:1d8::23) by SJ0PR19MB4496.namprd19.prod.outlook.com
+ (2603:10b6:a03:289::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.37; Wed, 17 Apr
+ 2024 13:15:30 +0000
+Received: from DB5PEPF00014B95.eurprd02.prod.outlook.com
+ (2603:10a6:10:1d8:cafe::4f) by DB9PR01CA0018.outlook.office365.com
+ (2603:10a6:10:1d8::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.38 via Frontend
+ Transport; Wed, 17 Apr 2024 13:15:30 +0000
+Authentication-Results: spf=pass (sender IP is 93.20.41.9)
+ smtp.mailfrom=Fortuneo.FR; dkim=pass (signature was verified)
+ header.d=fortuneo.fr;dmarc=bestguesspass action=none
+ header.from=Fortuneo.FR;compauth=pass reason=109
+Received-SPF: Pass (protection.outlook.com: domain of Fortuneo.FR designates
+ 93.20.41.9 as permitted sender) receiver=protection.outlook.com;
+ client-ip=93.20.41.9; helo=mxout7.arkea.com; pr=C
+Received: from mxout7.arkea.com (93.20.41.9) by
+ DB5PEPF00014B95.mail.protection.outlook.com (10.167.8.233) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.7452.22
+ via Frontend Transport; Wed, 17 Apr 2024 13:15:29 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:4922E90D1B7F88B304602F52303EE9C05B061C241CF56A3A96DF46A9C00ACA9C;UpperCasedChecksum:6F29002A17A50B6A07DC3FB1328032339E2288E1BCA3F5571B3307B5DF8C4DD7;SizeAsReceived:1595;Count:9
+Received: from mailingtux-ou-1-c.l.infra.arkea.com (unknown [10.141.7.238])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "mailingtux-ou-1-j.l.infra.arkea.com", Issuer "Arkea CA" (verified OK))
+	by mxout7.arkea.com (Postfix) with ESMTPS id 4VKLxX6L3Hz2STJ5
+	for <mariocastillo6@hotmail.com>; Wed, 17 Apr 2024 15:15:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fortuneo.fr;
+	s=202006; t=1713359728;
+	bh=EZ6yTRn4Wp+f5cxYbD56uEJwqakiMPhS3Ld/cLFHbzA=;
+	h=From:To:Subject:From;
+	b=Rz6ij4IypvjhyFg5Mavju8evCG7llNMpmwrHiWp0vPzAGJ4gzKUDLJNqUCQIKoTbv
+	 SB2ScHOLEsMpa9ZiFaxJ+9P0kQ55Sba4xt0E8lWnD0MXH/JsnjTSSQwi26Rzpq8lN3
+	 7oFuwJas3E05uud5jmr18tqb0XJDjT2+vK93DoWPagnxcnyHO5fU4RdLXJ68p7KbJ/
+	 jQP7HEhWDzfA7fMjL+HWNjKdEde+l+SXoGvjUsFzVVkgAt+g67wEHM5gW73xXePURj
+	 89Qx/3tLxbjx1IWgoXvw5s/BurFLwOsSG1xAd8P4RDWU64jjnFNa+PX92QAnI7SkHh
+	 VBI5yzk0rCJbA==
+Received: from batchtux-2-a.gicm.net (batchtux-2-a.gicm.net [10.144.136.240])
+	by mailingtux-ou-1-c.l.infra.arkea.com (Postfix) with ESMTP id 4VKLxX5yyKz3hhTK
+	for <mariocastillo6@hotmail.com>; Wed, 17 Apr 2024 15:15:28 +0200 (CEST)
+From: NOREPLY@Fortuneo.FR
+To: mariocastillo6@hotmail.com
+Message-ID: <30296223.225.1713359728780.JavaMail.3623spcftn@batchtux-2-a.gicm.net>
+Subject: =?UTF-8?Q?Votre_avis_d'ex=C3=A9cution_Fortuneo?=
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_224_10212701.1713359728779"
+X-IncomingHeaderCount: 9
+Return-Path: NOREPLY@Fortuneo.FR
+Date: Wed, 17 Apr 2024 13:15:29 +0000
+X-MS-Exchange-Organization-ExpirationStartTime: 17 Apr 2024 13:15:29.3984
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ d5cabe88-fc8b-4fed-3a07-08dc5ee07424
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ DB5PEPF00014B95:EE_|SJ0PR19MB4496:EE_|PH7PR19MB6109:EE_
+X-MS-Exchange-Organization-AuthSource:
+ DB5PEPF00014B95.eurprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 4/17/2024 11:11:18 AM
+X-MS-Office365-Filtering-Correlation-Id: d5cabe88-fc8b-4fed-3a07-08dc5ee07424
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 93.20.41.9
+X-SID-PRA: NOREPLY@FORTUNEO.FR
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:0;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2024 13:15:29.2109
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5cabe88-fc8b-4fed-3a07-08dc5ee07424
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ DB5PEPF00014B95.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR19MB4496
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:07.1976484
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7452.029
+X-Microsoft-Antispam-Mailbox-Delivery:
+ ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000305)(920221119095)(90000117)(920221120095)(90012020)(91020020)(91040095)(9050020)(9100341)(944500132)(2008001134)(4810010)(4910033)(9575002)(10195002)(9320005)(120001);
+X-Message-Info:
+ qZelhIiYnPkx84CNH6AeQs2r1mfbx475RiI5K0+Xb2co4FyeG9R6dUlnEHy2HYOb+SKr3WhHrrBC/xIuCP/rmyHC9K4E+c1SObpuPq5DcpWVmEoExuw9K8p+lEOQQ/cxGXNHeaaT3MJI0sTnuJV+yD6vD62RsYV9tAW64EE6PE3qPnJMQtqxLjM2l8jHNNVjZPoLlcDYiV6OG2gBb3QzZA==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+ =?iso-8859-1?Q?BuNsu+3knmYYroUtP29GahSCCRvZADvyeRA1gD/VPnjrNm5+Y+9N+hVavX?=
+ =?iso-8859-1?Q?ty5z9rZJe4lkOT0bQY+dre2Giyo44z1VVuDmedOUqMZVJOcuQbA3B1diu4?=
+ =?iso-8859-1?Q?64fO0ppPnq+aJM4BASFDyfH8G9YproZN/FMhBfbaRNsu1+uNvk3NZxk2V5?=
+ =?iso-8859-1?Q?Ulq7ueqvWc9JieAKF5Q471xA+Rl0SPKLnD2TRPidMt27ZBUoaCQzQe763d?=
+ =?iso-8859-1?Q?YTAzQTMirI0ZMn0zUmCTMPhB1sY3FU1qZfVqjnl5MOvViUq2nesfXQ169y?=
+ =?iso-8859-1?Q?ek+PaRcEsMvQ6qMqUqR0BsgmEw87iNLjQjH1DfOjvoDB6oSh3cUI+C1b8f?=
+ =?iso-8859-1?Q?Te+6g3mzMZt2U2MQGgs5hoLNsd/CNHIQAXP1YvdCNcEQvBFdLV1fBE8kvL?=
+ =?iso-8859-1?Q?sPC/MR2nafNohYUbgAFRTohLZ0/6k/9xCK2AGEhzj3fmW0s+McW3KnPRlL?=
+ =?iso-8859-1?Q?oC5o99i7SdcleJdE4CUJvLdSuzeCDfZw997YSRx5T5/GoqqdRAnK9gDgHE?=
+ =?iso-8859-1?Q?RqAhNw02lrEyaYRCm8ui1HkkzgGbGpEIgKCdsAHLDrABtxEMXy4kQoUMgt?=
+ =?iso-8859-1?Q?MjqODkLEX1DWFXwFEmxhjReRcgT8flUpinbEGZCg/OoDZJuTcdSFcdVvTP?=
+ =?iso-8859-1?Q?3YxBeB8xEgpTRPGHsleiaFAOCasehAzJNvEq4h+2/rqTZAx3Kum3RBIPjf?=
+ =?iso-8859-1?Q?tg2BETXml53oXBUVvNkBYLQBvTRf/9XRmC7wJfPyIAvnpS04vQsXFBEwrU?=
+ =?iso-8859-1?Q?3fImzKSikz2YrgA/ydC6cS66iWh6HOOYjJJleJm2oETUZwtePbRsNWgF13?=
+ =?iso-8859-1?Q?+YDxf5pD7aZqV6KcW+jIZ8W16WDFkJPoVBWDLunUoDk5rJGHlDH07/c5TH?=
+ =?iso-8859-1?Q?90cJvtzLCd3ZgVFHxGcNNZY74jOXiHA26l+2U2DeHCuDuNv2QJHLU/nPSU?=
+ =?iso-8859-1?Q?KPzru/2e1JhO502U3T44a0xkP8p0sUiKUSxgLf6B2+Fnx6jCLP+LCfnLQ8?=
+ =?iso-8859-1?Q?lw56ayGhuyapKrFZ4uZRPm5/OwAdeLHUq9SFgNuZ5tpaCUSYA+1rL2bpIt?=
+ =?iso-8859-1?Q?FFdo0ysRgnjwnZnhyAHpjAswkXdpp2YqvH4kAelFFfGhnNalZHuDt4gsq/?=
+ =?iso-8859-1?Q?o93WSdfG6a5nGi4Zortc4PbVSjRgS2b68BTU0YBH8oaDbMVBMxwLTZRplS?=
+ =?iso-8859-1?Q?t3MKQnhwzMt52AxnzzinnuOxEhvIIDWg2xmYyz2CwFYypu2/7D51fvEc+E?=
+ =?iso-8859-1?Q?YOCbbswlY7JCXWLtsQo0ULaDepLwbhNDjsoj3sIugi0DrBfFyD2FwEg6d5?=
+ =?iso-8859-1?Q?zNIIdk25zqicVdwtRNTYSesAtL7ye7CXKnLZWNzdOP5f2mUkBJGg9Gx6a7?=
+ =?iso-8859-1?Q?l0dycdsXNM/2dYCIvAtbrGrqvqGl55me9w7pQ8zlJuI7f3RDFscqczYlh/?=
+ =?iso-8859-1?Q?uHvuJLvjGZin+SDdV3AuqrhpKAyjRcKoo39aa7gjSvSEhXWlyf6tFZDCwo?=
+ =?iso-8859-1?Q?5XhgrK71t46ZDxtj2V6vWJXx/qV7tRo9q0nqxFPHpxeQ=3D=3D?=
+MIME-Version: 1.0
+
+------=_Part_224_10212701.1713359728779
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+
+Bonjour,
+Votre ordre d'achat sur Amundi ETF PEA MSCI Europe UCITS ETF (FR0013412038)=
+ a =E9t=E9 ex=E9cut=E9 =E0 29,1 EUR pour une quantit=E9 de 11.0 le 17/04/24=
+ =E0 15:12. (r=E9f 20240417-D991F)
+
+Pour consulter plus en d=E9tail ces informations, connectez-vous =E0 votre =
+Acc=E8s Client, rubrique " Historique des Op=E9rations".
+
+Un avis d'op=E9r=E9 vous permettant de contr=F4ler l'op=E9ration r=E9alis=
+=E9e et les conditions de son ex=E9cution vous sera communiqu=E9 au plus ta=
+rd un (1) jour ouvr=E9 apr=E8s l'ex=E9cution de l'op=E9ration. Cet avis est=
+ consultable dans la rubrique "E Relev=E9s et Documents "de votre Acc=E8s C=
+lient.
+
+Pour passer un ordre, consulter votre portefeuille ou votre carnet d'ordres=
+, connectez-vous =E0 votre Acc=E8s Client.
+
+Nous vous remercions de votre confiance,
+Le Service Clients
+
+------=_Part_224_10212701.1713359728779--

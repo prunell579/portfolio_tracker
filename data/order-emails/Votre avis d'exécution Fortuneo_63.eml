@@ -1,0 +1,139 @@
+Received: from BYAPR13MB2712.namprd13.prod.outlook.com (2603:10b6:a03:f9::15)
+ by BN6PR13MB3186.namprd13.prod.outlook.com with HTTPS; Thu, 19 May 2022
+ 11:45:30 +0000
+Received: from MW4PR03CA0358.namprd03.prod.outlook.com (2603:10b6:303:dc::33)
+ by BYAPR13MB2712.namprd13.prod.outlook.com (2603:10b6:a03:f9::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.7; Thu, 19 May
+ 2022 11:45:29 +0000
+Received: from MW2NAM10FT022.eop-nam10.prod.protection.outlook.com
+ (2603:10b6:303:dc:cafe::aa) by MW4PR03CA0358.outlook.office365.com
+ (2603:10b6:303:dc::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14 via Frontend
+ Transport; Thu, 19 May 2022 11:45:29 +0000
+Authentication-Results: spf=pass (sender IP is 93.20.41.9)
+ smtp.mailfrom=Fortuneo.FR; dkim=pass (signature was verified)
+ header.d=fortuneo.fr;dmarc=pass action=none
+ header.from=Fortuneo.FR;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of Fortuneo.FR designates
+ 93.20.41.9 as permitted sender) receiver=protection.outlook.com;
+ client-ip=93.20.41.9; helo=mxout7.arkea.com; pr=C
+Received: from mxout7.arkea.com (93.20.41.9) by
+ MW2NAM10FT022.mail.protection.outlook.com (10.13.155.101) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5273.14 via Frontend Transport; Thu, 19 May 2022 11:45:27 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:F61B95702C1E4A2E5344B0F851D29A986DDE6C7ED21AF88560D14B77D24ED466;UpperCasedChecksum:D72BA0E26C114F170FB51E32A0FCC128CA6245E529B0990B56D777031BF36B46;SizeAsReceived:1462;Count:9
+Received: from mailingtux-ou-1-c.l.infra.arkea.com (unknown [10.141.7.238])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(Client CN "mailingtux-ou-1-c.l.infra.arkea.com", Issuer "Arkea CA" (verified OK))
+	by mxout7.arkea.com (Postfix) with ESMTPS id 4L3p2G0v6qzJG9f
+	for <mariocastillo6@hotmail.com>; Thu, 19 May 2022 13:45:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fortuneo.fr;
+	s=202006; t=1652960726;
+	bh=4yfmGDdLDoqoM+Y0Q5dvFo4mP2+xmQXvlQq/VCHcock=;
+	h=From:To:Subject:From;
+	b=ItLVWoJV+Kbc1lyBB/EDJ7P2uphHeUdl+F/SlDXHOpA8+6xl/HJg0u43PM5QOz01X
+	 23xo3Rr2ZdJjtrVMz73WBAdw+Q5YhrZ6j/8DDMZeWthpz8cYc1oSwArYMF0Duq3iah
+	 YP3IN9+D5G13nORZy6cQHn07yWVBtLSQ1VAUe/bVuoZ59hPIHs8LoJQYoZG9uzsCK8
+	 /04yOfzL1GI4df4jkpbQ91vJ+7n8RKUSAAKySlnZeH7/zh4VS0jJ07zCJAI+BXVmec
+	 ycbSpca0TGbL8qiZLwsdbXwm/WMBgCVp7ItonpeDJS4XxjHsFNfM5LCOUmhiIZZoaz
+	 RFoJ0LzYoImrA==
+Received: from batchtux-2-a.gicm.net (va-j25-02.p.infra.arkea.com [10.144.136.240])
+	by mailingtux-ou-1-c.l.infra.arkea.com (Postfix) with ESMTP id 4L3p2G0fDwz3hhTH
+	for <mariocastillo6@hotmail.com>; Thu, 19 May 2022 13:45:26 +0200 (CEST)
+From: NOREPLY@Fortuneo.FR
+To: mariocastillo6@hotmail.com
+Message-ID: <3802175.235.1652960726025.JavaMail.3623spcftn@batchtux-2-a.gicm.net>
+Subject: =?UTF-8?Q?Votre_avis_d'ex=C3=A9cution_Fortuneo?=
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_234_28305717.1652960726024"
+X-IncomingHeaderCount: 9
+Return-Path: NOREPLY@Fortuneo.FR
+Date: Thu, 19 May 2022 11:45:27 +0000
+X-MS-Exchange-Organization-ExpirationStartTime: 19 May 2022 11:45:27.5898
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ c87065ff-38f5-47ec-65e1-08da398d11aa
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ MW2NAM10FT022.eop-nam10.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 5/19/2022 10:14:51 AM
+X-MS-Office365-Filtering-Correlation-Id: c87065ff-38f5-47ec-65e1-08da398d11aa
+X-MS-TrafficTypeDiagnostic: BYAPR13MB2712:EE_
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 93.20.41.9
+X-SID-PRA: NOREPLY@FORTUNEO.FR
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:0;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2022 11:45:27.3710
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c87065ff-38f5-47ec-65e1-08da398d11aa
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ MW2NAM10FT022.eop-nam10.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR13MB2712
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.9556457
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.5293.007
+X-Microsoft-Antispam-Mailbox-Delivery:
+ abwl:0;wl:0;pcwl:0;kl:0;iwl:0;ijl:0;dwl:0;dkl:0;rwl:0;ucf:0;jmr:0;ex:0;auth:1;dest:I;ENG:(5062000285)(90000117)(90012020)(91020020)(91040095)(5061607266)(5061608174)(9050020)(9100338)(2008001134)(2008000189)(4810004)(4910013)(9575002)(10195002)(9320005);
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0xO0Q9MTtHRD0xO1NDTD0z
+X-Microsoft-Antispam-Message-Info:
+ =?iso-8859-1?Q?FR9bsytHzqeCnsBg7VuEnjXoWXDJqOV+w3VYdMgUL0mcFOjCSleRzwhgUi?=
+ =?iso-8859-1?Q?/JRtfyJqvbvVLB40bclHq1eMn+7DBpQngig6DgZrxfpYEE2io5qhUb63pf?=
+ =?iso-8859-1?Q?qWRoXG0bbML3dw5bW0yCdsxLOqD6WlXUvK6dgzIO5Fhd8jMmfSAGK47b/y?=
+ =?iso-8859-1?Q?f8MR4NQBvo+pbwDnrPos5T1CNsLpIo2EA7HHr5HvwH5Vyq007hl+IXJmJZ?=
+ =?iso-8859-1?Q?qjka0KrTzhDUYiy7oNvMBwRHgLyw0nZbVH6WuiLks8f4y27O/vmc9byH17?=
+ =?iso-8859-1?Q?bhxC5XI1woIyul/nXUv8SwNPP7dZiyPpwrWgVlGB2FkF8kFgHsaqc+5cIK?=
+ =?iso-8859-1?Q?7r41m6DVHTEQf0Su6mOZtEVxlCDe3gYRBTYKt0n1fFLx5yWQNdpZh3hKL3?=
+ =?iso-8859-1?Q?rsnKuPPW6wmzTOthidV5z6lNoPnm8z3+NxvM4HnUjUShSjDsgxnIeVszEE?=
+ =?iso-8859-1?Q?jwSA9INte0HcTVpgd0JRmox9heGJhiCqwZt98SLyXI3bz/q5AFy5M5ldc4?=
+ =?iso-8859-1?Q?XNRvf1xo8lo9cMxnrXewOo6zellfJ6WRIZNHdXqT8OZ3PfC4B1Pt6DV5mU?=
+ =?iso-8859-1?Q?AYwYaJuE9xO7uKftUxbs2B6AAGfK8FxuAVcU/sDQCv3pFrlWAkyhdP2ciD?=
+ =?iso-8859-1?Q?zu86S8VvR9MDHbAu6PyNiVObu2Z1OiQWqoZ4ZITd94qkrj1kSptqS+k37x?=
+ =?iso-8859-1?Q?j8CNoAWgtYzqhJpiTVtLq2957Ag3r9E4iLmZ2Yn6R05/BL45J1CxoQHjcD?=
+ =?iso-8859-1?Q?GzUC2m9J6q27ug8mxgofKRdSl3FO/FED2NeuDzEfukOarMT7BQa2jFqYCX?=
+ =?iso-8859-1?Q?I9RLdsNo9iAF9rKsuDfHupegu1hh0TqzAEaeZOoqWGgMrroInhQuwUqq2y?=
+ =?iso-8859-1?Q?wI0XDEJMFjlqOpQo3+e3qFjoKiZmY4y7eB0tZX360zmusYIBUqM0WZrN5V?=
+ =?iso-8859-1?Q?plCA1E/SrO5iwzw38Rfe+BVNTIZdmyxXS2cPeWOWhrFJjLSlJhmkAzkNEr?=
+ =?iso-8859-1?Q?qWqR50v3H0Tj5dIo9NRikGqzgp8XsTeHoRpl3HEE2jYfnSHHzwS919YD2K?=
+ =?iso-8859-1?Q?YqyNxjZD5T/3c5rCGeXtJcH75gyqtE5cye77QfHuJyq+5tZtkjlJ9OXgdD?=
+ =?iso-8859-1?Q?hpg/UN4loilqL/G8s/82w+PXk0IfXKPqAqXmGrDyLaavc3Uf9pBJ/RK0So?=
+ =?iso-8859-1?Q?K10BVQnDkABsZMkidrjoiXYWrf2qOhC74UvBVKE9OGrz6f9SzABOYGPglm?=
+ =?iso-8859-1?Q?54fa0ke6K+myjoHtHH1a3J1xbvXUBr8PMLS28iEaCatazBVR9yQZEAub5B?=
+ =?iso-8859-1?Q?qqr69p+pwaS4rqWZsVDqvJ152zqP29ar2zQABaZ3d9cJGYAxMb5nEcnH4j?=
+ =?iso-8859-1?Q?2jYWuD4+3gEzBffR4OW/xCqWByFvF7TUoiDO3TtWpP0Zdh+XLZfBPuXXgf?=
+ =?iso-8859-1?Q?VPpJdhUmmI/H351jI4uB/feLVCk+j+C/fbCFeVdXnXFapwZ1TLsexO9rx+?=
+ =?iso-8859-1?Q?el6mK6ee+WU9SvU6MWrdnLeAjlWL+gCEdSLt32fyudEA=3D=3D?=
+MIME-Version: 1.0
+
+------=_Part_234_28305717.1652960726024
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+
+Bonjour,
+Votre ordre d'achat sur AMUNDI ETF PEA MSCI EUROPE UCITS ETF - EUR (FR00134=
+12038) a =E9t=E9 ex=E9cut=E9 =E0 23,59 EUR pour une quantit=E9 de 13.0 le 1=
+9/05/22 =E0 13:44. (r=E9f 20220519-2B884)
+
+Pour passer un ordre, consulter votre portefeuille ou votre carnet d'ordres=
+, connectez-vous =E0 votre Acc=E8s Client.
+
+Nous vous remercions de votre confiance,
+Le Service Clients=20
+
+------=_Part_234_28305717.1652960726024--

@@ -6,9 +6,9 @@ if __name__ == '__main__':
 
     print("Purchase estimator...")
     # configure current porfolio
-    pe500_qty = 332
-    pceu_qty = 256
-    paaem_qty = 151
+    pe500_qty = 412
+    pceu_qty = 325
+    paaem_qty = 160
 
     pf_contents = {
                     pftools.PE500: pe500_qty,

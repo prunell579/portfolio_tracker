@@ -315,10 +315,19 @@ class YFInterface(object):
         """
         end = date + dt.timedelta(days=1)
         data = yf.Ticker(YFInterface.yahoo_stock_ticker(ticker_name)).history(start=date, end=end, actions=False)
+        if data.empty:
+            raise ValueError(f"No data found for {ticker_name} on {date}")
         return data['Close'][0]
     
+    
     @staticmethod
-    def get_last_stock_price(tickers: List) -> dict:
+    def get_last_stock_price(ticker_name):
+        ticker_yahoo_name = YFInterface.yahoo_stock_ticker(ticker_name)
+        data =  yf.download(ticker_yahoo_name, period='1d')
+        return data['Close'][0]
+
+    @staticmethod
+    def get_last_stock_prices(tickers: List) -> dict:
         """Returns a dictionary containing the ticker names as key values and the last stock price as 
         items
         """
@@ -327,10 +336,9 @@ class YFInterface(object):
 
         stock_prices = {}
         for ticker_name in tickers:
-            ticker_yahoo_name = YFInterface.yahoo_stock_ticker(ticker_name)
-            data =  yf.download(ticker_yahoo_name, period='1d')
-            stock_prices[ticker_name] = data['Close'][0]
+            stock_prices[ticker_name] = YFInterface.get_last_stock_price(ticker_name)
         return stock_prices
+
 
 if __name__ == '__main__':
     operation_1 = Operation(
