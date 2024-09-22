@@ -15,10 +15,11 @@ sys.path.append('.')
 import model.ticker_codes as tc
 
 class Purchase(object):
-    def __init__(self, ticker: str, quantity: int, date: datetime.datetime):
+    def __init__(self, ticker: str, quantity: int, date: datetime.datetime, purchase_price:float):
         self.ticker = ticker
         self.quantity = quantity
         self.purchase_date = date
+        self.purchase_price = purchase_price
 
 class PorfolioV2(object):
     def __init__(self, purchases=None):
@@ -103,6 +104,10 @@ def search_for_purchase_info(text_content, verbose=False):
     order_match = re.search(r"Votre ordre d'achat sur (.+?) \(.+?\) a été exécuté", text_content)
     ticker = order_match.group(1) if order_match else None
 
+    # extract purchase price
+    purchase_price_match = re.search(r"à (\d+\,?\d*) EUR pour", text_content)
+    purchase_price = purchase_price_match.group(1) if purchase_price_match else None
+
     # Extracting quantity (number after 'pour une quantité de')
     quantity_match = re.search(r"quantité de (\d+\.?\d*)", text_content)
     quantity = quantity_match.group(1) if quantity_match else None
@@ -116,12 +121,13 @@ def search_for_purchase_info(text_content, verbose=False):
         print("Ticker:", ticker)
         print("Quantity:", quantity)
         print("Date and Time:", date_time)
+        print("purchase price:", purchase_price)
 
-    return(ticker, quantity, date_time)
+    return (ticker, quantity, date_time, purchase_price)
 
 def purchase_object_from_email(eml_file_path):
     text_content = get_text_content_from_eml(eml_file_path)
-    ticker, qty, date_time = search_for_purchase_info(text_content)
+    ticker, qty, date_time, purchase_price = search_for_purchase_info(text_content)
 
     if ticker == tc.PE500_LONG_FORMAT or ticker == 'Amundi PEA S&P 500 ESG UCITS ETF Acc':
         shorthand_ticker = tc.PE500
@@ -133,8 +139,9 @@ def purchase_object_from_email(eml_file_path):
         raise ValueError("Unknwon ticker {}".format(ticker))
 
     date_time_obj = datetime.datetime.strptime(date_time, '%d/%m/%y à %H:%M')
+    purchase_price_dot_notation = purchase_price.replace(',', '.')
 
-    return Purchase(shorthand_ticker, int(float(qty)), date_time_obj)
+    return Purchase(shorthand_ticker, int(float(qty)), date_time_obj, float(purchase_price_dot_notation))
 
 def generate_portfolio_db_from_eml():
     purchases_list = []
