@@ -23,11 +23,30 @@ class Purchase(object):
 
 class PorfolioV2(object):
     def __init__(self, purchases=None):
+        """
+        Format of the stock_price_history dictionary:
+        {
+            'AAPL': {
+                datetime.datetime(2021, 1, 1): 100,
+                datetime.datetime(2021, 1, 2): 102,
+                ...
+            },
+            'MSFT': {
+                datetime.datetime(2021, 1, 1): 200,
+                datetime.datetime(2021, 1, 2): 202,
+                ...
+            },
+            ...
+        }
+        """
         self.purchases = copy.deepcopy(purchases) if purchases else []
         self.stock_price_history = {}
 
     def get_purchases(self):
         return self.purchases.copy()
+    
+    def get_purchases_at_date(self, date: datetime.datetime):
+        return [purchase for purchase in self.purchases if purchase.purchase_date <= date]
 
     def add_purchase(self, purchase: Purchase):
         self.purchases.append(purchase)
@@ -67,7 +86,24 @@ class PorfolioV2(object):
 
     def get_first_purchase_date(self):
         return min([purchase.purchase_date for purchase in self.purchases])
+
+    def get_total_investment(self):
+        return sum([purchase.purchase_price * purchase.quantity for purchase in self.purchases])
     
+    def get_total_investement_at_date(self, date: datetime.datetime):
+        return sum([purchase.purchase_price * purchase.quantity for purchase in self.get_purchases_at_date(date)])
+
+    def get_performance(self, brute=False):
+        if brute:
+            return self.get_portfolio_value() - self.get_total_investment()
+        else:
+            return (self.get_portfolio_value() - self.get_total_investment()) / self.get_total_investment()
+        
+    def get_performance_at_date(self, date: datetime.datetime, brute=False):
+        if brute:
+            return self.get_portfolio_value_at_date(date) - self.get_total_investement_at_date(date)
+        else:
+            return (self.get_portfolio_value_at_date(date) - self.get_total_investement_at_date(date)) / self.get_total_investment()
 
 ### DB operations
 def get_text_content_from_eml(eml_file_path):

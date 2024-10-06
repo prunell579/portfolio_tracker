@@ -18,6 +18,7 @@ def see_portfolio_history(portfolio: pf.PorfolioV2, write_to_db=False):
 
     # Calculate portfolio value for each date
     values = []
+    performances = []
     for date in dates:
         print('processing date: {} ({} out of {})'.format(date, dates.get_loc(date), len(dates)))
         is_business_day = True
@@ -33,19 +34,37 @@ def see_portfolio_history(portfolio: pf.PorfolioV2, write_to_db=False):
 
         value = portfolio.get_portfolio_value_at_date(date)
         values.append(value)
+    
+        performance = portfolio.get_performance_at_date(date)
+        performances.append(performance)
 
     if write_to_db:
         pf.write_to_db(portfolio)
 
-    # Plot the portfolio value over time
-    plt.figure(figsize=(10, 6))
-    plt.plot(dates, values, label="Portfolio Value")
-    plt.xlabel("Date")
-    plt.ylabel("Value")
-    plt.title("Portfolio Value Over Time")
-    plt.gcf().autofmt_xdate()
-    plt.legend()
-    plt.grid(True)
+    # Create a figure with two subplots, one for portfolio value and one for performance
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 12))
+
+    # Plot the portfolio value over time on the first subplot
+    ax1.plot(dates, values, label="Portfolio Value")
+    ax1.set_xlabel("Date")
+    ax1.set_ylabel("Value")
+    ax1.set_title("Portfolio Value Over Time")
+    ax1.legend()
+    ax1.grid(True)
+
+    # Plot the portfolio performance over time on the second subplot
+    ax2.plot(dates, performances, label="Portfolio Performance", color='orange')
+    ax2.set_xlabel("Date")
+    ax2.set_ylabel("Performance")
+    ax2.set_title("Portfolio Performance Over Time")
+    ax2.legend()
+    ax2.grid(True)
+
+    # Adjust the x-axis date format for both subplots
+    fig.autofmt_xdate()
+
+    # Show the plots
+    plt.tight_layout()
     plt.show()
 
 def dummy_porfolio():
