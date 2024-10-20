@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 import model.portfolio as pf
 import copy
 
@@ -13,6 +13,24 @@ import pickle
 
 sys.path.append('.')
 import model.ticker_codes as tc
+
+
+def is_weekend(date: dt.datetime):
+    if date.weekday() > 4:
+        return True
+    return False
+
+def get_previous_business_day(date: datetime.datetime):
+    # If it's Saturday, go back to Friday
+    if date.weekday() == 5:  # Saturday
+        return date - dt.timedelta(days=1)
+    # If it's Sunday, go back to Friday
+    elif date.weekday() == 6:  # Sunday
+        return date - dt.timedelta(days=2)
+    # For Monday to Friday, return the previous day
+    else:
+        return date - dt.timedelta(days=1)
+
 
 class Purchase(object):
     def __init__(self, ticker: str, quantity: int, date: datetime.datetime):
@@ -66,7 +84,25 @@ class PorfolioV2(object):
 
     def get_first_purchase_date(self):
         return min([purchase.purchase_date for purchase in self.purchases])
-    
+
+    def composition(self):
+        """
+        Returns a dictionary with the tickers as keys, and 
+        their composition in VALUE as value
+        """
+        pf_value = self.get_portfolio_value()
+        composition = {}
+
+        # TODO: logic to distinguish BD and non BD shold be where?
+        today = datetime.datetime.today()
+        if is_weekend(today):
+            today = get_previous_business_day(today)
+        for ticker in self.get_portfolio_tickers():
+            ticker_value = self.get_ticker_shares(ticker) * self.get_stock_price_at_date(ticker, date=today)
+            composition[ticker] = ticker_value / pf_value
+
+        return composition
+        
 
 ### DB operations
 def get_text_content_from_eml(eml_file_path):
@@ -144,7 +180,7 @@ def generate_portfolio_db_from_eml():
 
     return PorfolioV2(purchases_list)
 
-def load_portfolio_db():
+def load_portfolio_db() -> PorfolioV2: 
     with open('portfolio_db.pkl', 'rb') as f:
         return pickle.load(f)
 

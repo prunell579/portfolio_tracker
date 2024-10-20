@@ -1,2 +1,4 @@
 /venv/
 /venv_gmail
+*.pyc
+.DS_store
