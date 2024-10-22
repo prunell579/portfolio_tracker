@@ -29,17 +29,20 @@
 <!-- Chart.js library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+
+    var tickers = {{ tickers | safe }};
+    var ticker_weights = {{ weights | safe }};
+
     // Data for the pie chart
     const data = {
-        labels: ['Apples', 'Bananas', 'Cherries', 'Grapes'],
+        labels: tickers,
         datasets: [{
-            label: 'Fruit Consumption',
-            data: [300, 50, 100, 80],
+            label: 'Stock weight',
+            data: ticker_weights,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.6)',
                 'rgba(54, 162, 235, 0.6)',
                 'rgba(255, 206, 86, 0.6)',
-                'rgba(75, 192, 192, 0.6)'
             ],
             borderWidth: 1,
         }]

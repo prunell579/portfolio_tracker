@@ -85,7 +85,7 @@ class PorfolioV2(object):
     def get_first_purchase_date(self):
         return min([purchase.purchase_date for purchase in self.purchases])
 
-    def composition(self):
+    def composition(self, percentage_form=False):
         """
         Returns a dictionary with the tickers as keys, and 
         their composition in VALUE as value
@@ -99,7 +99,12 @@ class PorfolioV2(object):
             today = get_previous_business_day(today)
         for ticker in self.get_portfolio_tickers():
             ticker_value = self.get_ticker_shares(ticker) * self.get_stock_price_at_date(ticker, date=today)
-            composition[ticker] = ticker_value / pf_value
+            if percentage_form:
+                stock_weight = 100 * ticker_value / pf_value
+            else:
+                stock_weight = ticker_value / pf_value
+
+            composition[ticker] = stock_weight
 
         return composition
         
