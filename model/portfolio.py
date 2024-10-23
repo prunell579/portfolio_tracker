@@ -309,10 +309,13 @@ class YFInterface(object):
             raise ValueError('Ticker {} not supported'.format(ticker_name))
 
     @staticmethod
-    def stock_close_price(ticker_name: str, date:dt) -> float:
+    def stock_close_price(ticker_name: str, date:dt.datetime) -> float:
         """
         Returns close stock price for ticker_name at date
         """
+        if date.date() == dt.datetime.today().date():
+            # fallback to safe method for this conditions
+            return YFInterface.get_last_stock_price(ticker_name)
         end = date + dt.timedelta(days=1)
         data = yf.Ticker(YFInterface.yahoo_stock_ticker(ticker_name)).history(start=date, end=end, actions=False)
         if data.empty:
