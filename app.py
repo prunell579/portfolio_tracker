@@ -14,5 +14,10 @@ def index():
     return render_template('index.html', tickers=list(comp.keys()),
                            weights=list(comp.values()))
 
+@app.route('/timeseries')
+def pf_time_series():
+    return render_template('time_series.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
