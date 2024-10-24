@@ -177,9 +177,9 @@ def purchase_object_from_email(eml_file_path):
 
     return Purchase(shorthand_ticker, int(float(qty)), date_time_obj)
 
-def generate_portfolio_db_from_eml():
+def generate_portfolio_db_from_eml(emls_folder='data/order-emails'):
     purchases_list = []
-    for eml_file in Path("data\order-emails").rglob("*.eml"):
+    for eml_file in Path(emls_folder).rglob("*.eml"):
         purchase_obj = purchase_object_from_email(eml_file)
         purchases_list.append(purchase_obj)
 
