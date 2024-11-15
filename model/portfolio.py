@@ -138,7 +138,7 @@ class Portfolio(object):
         pf = cls.from_operations_list(operations_list)
 
         if fetch_stock_prices:
-            prices = YFInterface.get_last_stock_price(pf.get_portfolio_tickers())
+            prices = YFInterface.get_last_stock_prices(pf.get_portfolio_tickers())
             pf.set_stock_prices(prices)
 
         return pf
@@ -269,7 +269,7 @@ class BuyEstimatorHelper(object):
         simulated_pf = copy.deepcopy(base_pf)
 
         if not current_prices:
-            current_prices = YFInterface.get_last_stock_price(list(purchase_dict.keys()))
+            current_prices = YFInterface.get_last_stock_prices(list(purchase_dict.keys()))
 
         investment = dict.fromkeys(purchase_dict.keys())
         for ticker_name, quantity in purchase_dict.items():
@@ -325,6 +325,13 @@ class YFInterface(object):
         ticker_yahoo_name = YFInterface.yahoo_stock_ticker(ticker_name)
         data =  yf.download(ticker_yahoo_name, period='1d')
         return data['Close'][0]
+
+    @staticmethod
+    def get_last_stock_prices(ticker_names: List) -> dict:
+        prices = {}
+        for ticker in ticker_names:
+            prices[ticker] = YFInterface.get_last_stock_price(ticker)
+        return prices
 
     @staticmethod
     def get_last_stock_prices(tickers: List) -> dict:
