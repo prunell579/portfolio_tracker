@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylish Pie Chart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .chart-container {
+            width: 50%;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chart-container">
+    <canvas id="myPieChart"></canvas>
+</div>
+
+<!-- Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+    var tickers = {{ tickers | safe }};
+    var ticker_weights = {{ weights | safe }};
+
+    // Data for the pie chart
+    const data = {
+        labels: tickers,
+        datasets: [{
+            label: 'Stock weight',
+            data: ticker_weights,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(255, 206, 86, 0.6)',
+            ],
+            borderWidth: 1,
+        }]
+    };
+
+    // Pie chart configuration
+    const config = {
+        type: 'pie',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Portfolio composition'
+                }
+            }
+        }
+    };
+
+    // Render the chart
+    const myPieChart = new Chart(
+        document.getElementById('myPieChart'),
+        config
+    );
+</script>
+<a href="{{ url_for('pf_time_series') }}"> Go to Time Series</a>
+</body>
+</html>

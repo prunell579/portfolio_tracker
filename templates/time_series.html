@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Time Series Chart</title>
+    <!-- Load Luxon Library (required for date handling) -->
+    <script src="https://cdn.jsdelivr.net/npm/luxon"></script>
+    <!-- Load Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Load Chart.js Luxon Adapter -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon"></script>
+</head>
+<body>
+    <h1>Basic Time Series Chart</h1>
+    <canvas id="myTimeSeriesChart"></canvas>
+
+    <script>
+        // Sample time series data (ISO 8601 date strings)
+        var dates = {{ dates | safe }};
+        var values = {{ values | safe }};
+
+        var ctx = document.getElementById('myTimeSeriesChart').getContext('2d');
+        var myTimeSeriesChart = new Chart(ctx, {
+            type: 'line',  // Line chart for time series data
+            data: {
+                datasets: [{
+                    label: 'Sample Data',
+                    data: dates.map((time, i) => ({x: time, y: values[i]})),  // X (time) and Y (value) pairs
+                    borderColor: 'blue',
+                    fill: false  // No fill under the line
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',  // X-axis should interpret the data as dates/times
+                        time: {
+                            unit: 'month'  // Display one data point per month
+                        }
+                    },
+                    y: {
+                        beginAtZero: true  // Y-axis starts at zero
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
