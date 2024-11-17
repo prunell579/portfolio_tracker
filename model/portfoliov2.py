@@ -78,7 +78,7 @@ class PorfolioV2(object):
     def get_portfolio_tickers(self):
         return set([purchase.ticker for purchase in self.purchases])
     
-    def get_stock_price_at_date(self, ticker: str, date: datetime.datetime):
+    def get_stock_price_at_date(self, ticker: str, date: datetime.datetime, update_pf_file=True):
         try:
             return self.stock_price_history[ticker][date]
         except KeyError:
@@ -86,6 +86,10 @@ class PorfolioV2(object):
                 self.stock_price_history[ticker] = {}
             
             self.stock_price_history[ticker][date] = pf.YFInterface.stock_close_price(ticker, date)
+
+            if update_pf_file:
+                write_to_db(self)
+
             return self.stock_price_history[ticker][date]
 
     def get_portfolio_value(self):
