@@ -2,6 +2,7 @@ import sys
 import unittest
 sys.path.append(".")
 import model.portfoliov2 as pf
+import datetime as dt
 
 class PF2TestCase(unittest.TestCase):
     
@@ -18,6 +19,11 @@ class PF2TestCase(unittest.TestCase):
         my_pf = pf.generate_portfolio_db_from_eml('data/order-emails/test_data')
         print(my_pf.get_portfolio_tickers())
 
+
+    def test_get_first_purchase_date(self):
+        my_pf = pf.generate_portfolio_db_from_eml('data/order-emails/test_data')
+        self.assertEqual(dt.datetime(2021, 7, 16, 12, 15, 00), my_pf.get_first_purchase_date())
+        
 
 if __name__ == '__main__':
     unittest.main()
