@@ -17,8 +17,8 @@
 
     <script>
         // Sample time series data (ISO 8601 date strings)
-        var times = ['2024-01-01T00:00:00', '2024-02-01T00:00:00', '2024-03-01T00:00:00'];
-        var values = [10, 20, 30];  // Sample Y-axis values
+        var dates = {{ dates | safe }};
+        var values = {{ values | safe }};
 
         var ctx = document.getElementById('myTimeSeriesChart').getContext('2d');
         var myTimeSeriesChart = new Chart(ctx, {
@@ -26,7 +26,7 @@
             data: {
                 datasets: [{
                     label: 'Sample Data',
-                    data: times.map((time, i) => ({x: time, y: values[i]})),  // X (time) and Y (value) pairs
+                    data: dates.map((time, i) => ({x: time, y: values[i]})),  // X (time) and Y (value) pairs
                     borderColor: 'blue',
                     fill: false  // No fill under the line
                 }]
