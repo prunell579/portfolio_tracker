@@ -39,6 +39,11 @@ class Purchase(object):
         self.purchase_date = date
         self.purchase_price = purchase_price
 
+    def jsonfy(self):
+        dict_repr = self.__dict__
+        dict_repr['purchase_date'] = self.purchase_date.isoformat()
+        return dict_repr
+
 class PorfolioV2(object):
     def __init__(self, purchases=None):
         """
@@ -149,6 +154,26 @@ class PorfolioV2(object):
             return self.get_portfolio_value_at_date(date) - self.get_total_investement_at_date(date)
         else:
             return (self.get_portfolio_value_at_date(date) - self.get_total_investement_at_date(date)) / self.get_total_investment()
+
+    def _jsonify_stock_history(self):
+        jsonified_dict = dict.fromkeys(self.stock_price_history.keys())
+        for ticker_name, stock_history_info in self.stock_price_history.items():
+            jsonified_dict[ticker_name] = {}
+            for stock_time_stamp, stock_price in stock_history_info.items():
+                jsonified_dict[ticker_name][stock_time_stamp.isoformat()] = stock_price
+
+        return jsonified_dict
+    
+    def jsonfy(self):
+        pf_dict_form = dict.fromkeys(self.__dict__)
+        
+        purchases_list_json_repr = [purchase.jsonfy() for purchase in self.purchases]
+        stock_price_history_json_repr = self._jsonify_stock_history()
+
+        pf_dict_form['purchases'] = purchases_list_json_repr
+        pf_dict_form['stock_price_history'] = stock_price_history_json_repr
+
+        return pf_dict_form
 
 ### DB operations
 def get_text_content_from_eml(eml_file_path):
