@@ -10,3 +10,6 @@ if __name__ == "__main__":
     
     with open('portfolio_db.json', 'w') as f:
         json.dump(my_pf.jsonfy(), f, indent=4)
+
+    pf2 = pf.PorfolioV2.from_json()
+    print('bl')

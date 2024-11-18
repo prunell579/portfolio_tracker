@@ -1,4 +1,5 @@
 import datetime as dt
+import json
 import model.portfolio as pf
 import copy
 
@@ -33,6 +34,18 @@ def get_previous_business_day(date: datetime.datetime):
 
 
 class Purchase(object):
+
+    @classmethod
+    def from_json_data(cls, json_data: dict):
+        return cls(
+                    json_data['ticker'],
+                    json_data['quantity'],
+                    datetime.datetime.fromisoformat(json_data['purchase_date']),
+                    json_data['purchase_price'],
+                    )
+
+
+
     def __init__(self, ticker: str, quantity: int, date: datetime.datetime, purchase_price:float):
         self.ticker = ticker
         self.quantity = quantity
@@ -45,6 +58,30 @@ class Purchase(object):
         return dict_repr
 
 class PorfolioV2(object):
+
+    @classmethod
+    def from_json(cls):
+        with open('portfolio_db.json', 'r') as f:
+            pf_json_repr = json.load(f)
+            purchases = [Purchase.from_json_data(purchase_json_data) for purchase_json_data in pf_json_repr['purchases']]
+            stock_history = PorfolioV2._stock_history_from_json_data(pf_json_repr['stock_price_history'])
+
+        pf_instance = cls(purchases)
+        pf_instance.stock_price_history = stock_history.copy()
+        return pf_instance
+
+    @staticmethod
+    def _stock_history_from_json_data(jsonified_stock_history: dict):
+
+        stock_history_info = dict.fromkeys(jsonified_stock_history.keys())
+        for ticker, json_stock_history_info in jsonified_stock_history.items():
+            stock_history_info[ticker] = {}
+            for json_stock_data_timestamp, stock_price in json_stock_history_info.items():
+                stock_history_info[ticker][datetime.datetime.fromisoformat(json_stock_data_timestamp)] = stock_price
+
+        return stock_history_info
+
+
     def __init__(self, purchases=None):
         """
         Format of the stock_price_history dictionary:
@@ -163,7 +200,7 @@ class PorfolioV2(object):
                 jsonified_dict[ticker_name][stock_time_stamp.isoformat()] = stock_price
 
         return jsonified_dict
-    
+        
     def jsonfy(self):
         pf_dict_form = dict.fromkeys(self.__dict__)
         
